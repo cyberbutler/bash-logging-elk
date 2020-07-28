@@ -3,6 +3,16 @@ This project uses [Anthony Lapenna’s Docker Compose repository for ELK](https:
 
 You can read the full article on how this repository works [here](). 
 
+## Start the stack
+```bash
+docker-compose up --build -d
+```
+
+Launch a bash shell in the `operator` container:
+```bash
+docker exec -it bash-logging-elk_operator_1 bash
+```
+
 ## How to use
 All commands are logged to `/var/log/bash.log` using `rsyslog`. `filebeat` pushes those logs to the `logstash` container over TCP 5000. By default you can login to Kibana at `http://localhost:5601` with the credentials `elastic:changme`.
 
