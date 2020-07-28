@@ -1,0 +1,41 @@
+# Generic FileBeat Processor
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/bash.log
+  fields:
+    infralogtype: bash
+  fields_under_root: true
+
+filebeat.config.modules:
+  # Glob pattern for configuration loading
+  path: ${path.config}/modules.d/*.yml
+
+  # Set to true to enable config reloading
+  reload.enabled: false
+
+  # Period on which files under path should be checked for changes
+  #reload.period: 10s
+
+setup.template.settings:
+  index.number_of_shards: 3
+
+name: ${HOSTNAME}
+
+output.logstash:
+  hosts: ["logstash:5000"]
+
+logging:
+  level: info
+  to_files: true
+  to_syslog: false
+  files:
+    path: /var/log/filebeat
+    name: bash-beat.log
+    keepfiles: 2
+
+processors:
+  - add_host_metadata: ~
+  - add_docker_metadata: ~
+
