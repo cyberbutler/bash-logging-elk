@@ -20,7 +20,7 @@ logger -S 10000 -p local6.debug "{\
 \"user\": \"$(whoami)\", \
 \"path\": \"$(pwd)\", \
 \"pid\": \"$$\", \
-\"b64_command\": \"$(history 1 | sed "s/^[ ]*[0-9]\+[ ]*//" | base64 -w0 )\", \
+\"b64_command\": \"$(history 1 | sed -r "s/^\s*[0-9]+\s*//" | base64 -w0 )\", \
 \"status\": \"$RETRN_VAL\", \
 \"b64_output\": \"$LAST_OUTPUT\"\
 }"; \
@@ -29,7 +29,6 @@ unset LAST_OUTPUT; \
 
 # Add PROMPT_COMMAND to global bash profiles 
 RUN echo "export PROMPT_COMMAND='${PROMPT_COMMAND}'" >> /etc/bash.bashrc
-RUN echo "export PROMPT_COMMAND='${PROMPT_COMMAND}'" >> /etc/profile
 
 # Create a helper function so that we can log the output of commands when desired with `logoutput <command>`
 
