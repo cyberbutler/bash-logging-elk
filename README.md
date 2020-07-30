@@ -1,7 +1,7 @@
 # Docker Bash Logging ELK Stack
 This project uses [Anthony Lapenna’s Docker Compose repository for ELK](https://github.com/deviantony/docker-elk) as its base. The `operator` container was built by @cyberbutler as well as the Logstash pipeline. 
 
-You can read the full article on how this repository works [here](). 
+You can read the full article on how this repository works [here](https://medium.com/maverislabs/logging-bash-history-cefdce602595?sk=f5b972dc7bf99c2409add045c388a483). 
 
 ## Start the stack
 ```bash
