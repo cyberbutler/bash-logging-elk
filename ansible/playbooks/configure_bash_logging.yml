@@ -1,0 +1,5 @@
+---
+- name: Configure Bash Logging
+  hosts: all
+  roles:
+    - role: bash_logger

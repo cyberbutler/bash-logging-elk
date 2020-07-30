@@ -1,0 +1,8 @@
+# Copy this file to inventory.yml and modify
+all:
+  hosts:
+    127.0.0.1:
+  vars:
+    ELK_VERSION: 7.6.2
+    logstash_server: 127.0.0.1:5044
+    ansible_user: root

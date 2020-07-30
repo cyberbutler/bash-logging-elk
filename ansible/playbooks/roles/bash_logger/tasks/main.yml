@@ -1,0 +1,50 @@
+---
+# Configure Bash Command Logging
+- name: "Update System"
+  apt:
+    update_cache: yes
+    state: present
+    name: "rsyslog"
+
+- name: "Download Filebeat"
+  get_url:
+    url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ ELK_VERSION }}-amd64.deb"
+    dest: "/tmp/filebeat-{{ ELK_VERSION }}-amd64.deb"
+
+- name: "Install Filebeat"
+  apt:
+    deb: "/tmp/filebeat-{{ ELK_VERSION }}-amd64.deb"
+
+- name: "Append PROMPT_COMMAND Environment Variable"
+  lineinfile:
+    path: /etc/bash.bashrc
+    regexp: "^export PROMPT_COMMAND=.*$"
+    line: "export PROMPT_COMMAND='RETRN_VAL=$?; if [ -f /tmp/lastoutput.tmp ]; then LAST_OUTPUT=$(cat /tmp/lastoutput.tmp); rm /tmp/lastoutput.tmp; fi; logger -S 10000 -p local6.debug \"{\\\"user\\\": \\\"$(whoami)\\\", \\\"path\\\": \\\"$(pwd)\\\", \\\"pid\\\": \\\"$$\\\", \\\"b64_command\\\": \\\"$(history 1 | sed -r \"s/^\\s*[0-9]+\\s*//\" | base64 -w0 )\\\", \\\"status\\\": \\\"$RETRN_VAL\\\", \\\"b64_output\\\": \\\"$LAST_OUTPUT\\\"}\"; unset LAST_OUTPUT; '"
+
+- name: "Append logoutput Helper Command to Bash Profile"
+  lineinfile:
+    path: /etc/bash.bashrc
+    line: 'logoutput() { output=$(while read input; do echo "$input"; done < "${1:-/dev/stdin}"); echo -e "$output\n"; echo -e "$output" | head -c 10000 | base64 -w0 > /tmp/lastoutput.tmp; return $?; }'
+
+
+- name: "Upload rsyslog rotation config"
+  lineinfile:
+    path: /etc/rsyslog.d/bash.conf
+    line: local6.*    /var/log/bash.log
+    create: yes
+  notify:
+    - restart rsyslog
+
+- name: "Configure Logrotate to rotate bash.log"
+  lineinfile:
+    path: /etc/logrotate.d/rsyslog
+    insertafter: "^\/var\/log\/messages"
+    line: /var/log/bash.log
+
+- name: Configure Filebeat
+  template:
+    src: ../templates/etc_filebeat_filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+    mode: 0644
+  notify:
+    - restart filebeat
