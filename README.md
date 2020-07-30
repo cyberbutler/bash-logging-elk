@@ -14,6 +14,7 @@ docker exec -it bash-logging-elk_operator_1 bash
 ```
 
 ## Deploy with Ansible
+If you would rather deploy the bash logging configuration to existing or new infrastructure as opposed to manually replicating the configuration I've described in the bash-operator container, you can use the ansible playbook included in this repository.
 ```bash
 cd ansible/
 cp inventory.yml.example inventory.yml
