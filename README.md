@@ -13,6 +13,14 @@ Launch a bash shell in the `operator` container:
 docker exec -it bash-logging-elk_operator_1 bash
 ```
 
+## Deploy with Ansible
+```bash
+cd ansible/
+cp inventory.yml.example inventory.yml
+# Modify inventory.yml
+ansible-playbook playbooks/configure_bash_logging.yml
+```
+
 ## How to use
 All commands are logged to `/var/log/bash.log` using `rsyslog`. `filebeat` pushes those logs to the `logstash` container over TCP 5000. By default you can login to Kibana at `http://localhost:5601` with the credentials `elastic:changme`.
 
