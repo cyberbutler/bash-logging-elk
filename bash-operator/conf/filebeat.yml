@@ -24,7 +24,7 @@ setup.template.settings:
 name: ${HOSTNAME}
 
 output.logstash:
-  hosts: ["logstash:5000"]
+  hosts: ["logstash:5044"]
 
 logging:
   level: info
