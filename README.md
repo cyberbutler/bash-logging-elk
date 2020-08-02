@@ -23,7 +23,7 @@ ansible-playbook playbooks/configure_bash_logging.yml
 ```
 
 ## How to use
-All commands are logged to `/var/log/bash.log` using `rsyslog`. `filebeat` pushes those logs to the `logstash` container over TCP 5000. By default you can login to Kibana at `http://localhost:5601` with the credentials `elastic:changme`.
+All commands are logged to `/var/log/bash.log` using `rsyslog`. `filebeat` pushes those logs to the `logstash` container over TCP 5044. By default you can login to Kibana at `http://localhost:5601` with the credentials `elastic:changme`.
 
 To log the output of your commands you can either feed STDOUT to STDIN by piping your commands to `logoutput` or by using `logoutput` directly against a file:
 
